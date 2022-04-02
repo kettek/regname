@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
 
 	"github.com/martinlindhe/inputbox"
@@ -134,6 +135,10 @@ func main() {
 	var errs []error
 	var processed []string
 	for k, v := range renameMap {
+		if err := os.MkdirAll(filepath.Dir(v), os.ModePerm); err != nil {
+			errs = append(errs, err)
+			continue
+		}
 		if err := os.Rename(k, v); err != nil {
 			errs = append(errs, err)
 		} else {
